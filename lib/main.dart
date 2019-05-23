@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
+import 'package:quebex_app_search_2/UI/crew_detail.dart';
+import 'package:quebex_app_search_2/UI/search_page.dart';
 import 'package:quebex_app_search_2/model/search_result.dart';
-import 'package:quebex_app_search_2/services/http_service.dart';
+import 'package:quebex_app_search_2/services/crew_services.dart';
+import 'package:quebex_app_search_2/services/search_service.dart';
 
 void main() async {
   runApp(MyApp());
@@ -29,15 +31,12 @@ class _MyCustomFormState extends State<MyCustomForm> {
   final myController = TextEditingController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     myController.addListener(listener);
   }
 
   listener() async {
-   setState(() {
-     
-   });
+    setState(() {});
   }
 
   @override
@@ -56,9 +55,11 @@ class _MyCustomFormState extends State<MyCustomForm> {
         centerTitle: true,
         actions: <Widget>[
           IconButton(
-            icon: new Icon(Icons.search),
-            onPressed: () {},
-          )
+              icon: new Icon(Icons.search),
+              onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SearchPage()),
+                  ))
         ],
       ),
       body: Column(
@@ -70,18 +71,37 @@ class _MyCustomFormState extends State<MyCustomForm> {
             ),
           ),
           Expanded(
-                      child: FutureBuilder<List<Result>>(
-                future: HttpService().search(myController.text),
+            child: FutureBuilder<List<SearchResult>>(
+                future: SearchService().search(myController.text),
                 builder: (context, snapshot) {
-                 
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
                   if (snapshot.hasData) {
-                    if(snapshot.data.length==0){
-                      return Center(child: Text("No Data"),);
+                    if (snapshot.data.length == 0) {
+                      return Center(
+                        child: Text("No Data"),
+                      );
                     }
                     return ListView.separated(
                       itemBuilder: (context, index) => ListTile(
-                        leading: Image.network(snapshot.data[index].searchThumb??"https://content.reelnepal.com/photos/crewstanphotos/im40X54/40X54profile.jpg"),
-                            title: Text(snapshot.data[index].name,),
+                            onTap: () {
+                              return Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CrewDetailPage(
+                                          snapshot.data[index].id,
+                                          snapshot.data[index].name)));
+                            },
+                            // TODO: Now add on tap here and navigate
+                            leading: Image.network(snapshot
+                                    .data[index].searchThumb ??
+                                "https://content.reelnepal.com/photos/crewstanphotos/im40X54/40X54profile.jpg"),
+                            title: Text(
+                              snapshot.data[index].name,
+                            ),
                           ),
                       separatorBuilder: (context, _) => Divider(),
                       itemCount: snapshot.data.length,
@@ -97,20 +117,4 @@ class _MyCustomFormState extends State<MyCustomForm> {
       ),
     );
   }
-}
-
-Widget _searchListView(BuildContext context) {
-  return ListView(
-    children: <Widget>[
-      ListTile(
-        title: Text('name'),
-      ),
-      ListTile(
-        title: Text('name'),
-      ),
-      ListTile(
-        title: Text('name'),
-      ),
-    ],
-  );
 }

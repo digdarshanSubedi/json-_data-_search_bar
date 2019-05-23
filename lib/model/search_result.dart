@@ -1,38 +1,26 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'search_result.g.dart';
 
+@JsonSerializable()
+class SearchResult {
+  final int id;
+  final String name;
+  final String urlTitle;
+  final String details;
+  final String searchThumb;
+  final String category;
 
-class Result {
-  int id;
-  String name;
-  String urlTitle;
- String details;
-  String searchThumb;
-  String category;
+  SearchResult({
+    this.category,
+    this.searchThumb,
+    this.details,
+    this.id,
+    this.urlTitle,
+    this.name,
+  });
 
-  Result(
-      {this.id,
-      this.name,
-      this.urlTitle,
-      this.details,
-      this.searchThumb,
-      this.category});
+  factory SearchResult.fromJson(Map<String, dynamic> json) =>
+      _$SearchResultFromJson(json);
 
-  Result.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    urlTitle = json['urlTitle'];
-    details = json['details'];
-    searchThumb = json['searchThumb'];
-    category = json['category'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['urlTitle'] = this.urlTitle;
-    data['details'] = this.details;
-    data['searchThumb'] = this.searchThumb;
-    data['category'] = this.category;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$SearchResultToJson(this);
 }
