@@ -30,7 +30,7 @@ dev_dependencies:
     sdk: flutter
   json_serializable:
   build_runner:
-
+  smooth_star_rating :
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 

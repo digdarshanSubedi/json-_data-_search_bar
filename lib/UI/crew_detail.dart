@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quebex_app_search_2/model/crew.dart';
 import 'package:quebex_app_search_2/services/crew_services.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class CrewDetailPage extends StatefulWidget {
   final int crewId;
@@ -21,6 +22,7 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.crewName),
+        backgroundColor: Colors.green,
       ),
       body: FutureBuilder<Crew>(
           future: CrewService().getCrewDetail(widget.crewId),
@@ -51,10 +53,14 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
                   Text(
                     snapshot.data.name,
                     textAlign: TextAlign.center,
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
                   ),
                   Text(
                     snapshot.data.nameNepali,
                     textAlign: TextAlign.center,
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
                   ),
                 ],
               );
